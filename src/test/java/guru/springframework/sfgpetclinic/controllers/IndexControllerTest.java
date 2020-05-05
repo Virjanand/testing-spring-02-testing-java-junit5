@@ -4,10 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.*;
 
 import java.time.Duration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class IndexControllerTest {
 
@@ -22,6 +25,8 @@ class IndexControllerTest {
     @Test
     void index() {
         assertEquals("index", controller.index(), "Wrong view returned");
+
+        assertThat(controller.index()).isEqualTo("index");
     }
 
     @DisplayName("Test exception")
@@ -50,5 +55,52 @@ class IndexControllerTest {
 
             System.out.println("I won't get here");
         });
+    }
+
+    @Test
+    void testAssumptionTrue() {
+        assumeTrue("GURU".equalsIgnoreCase(System.getenv("GURU_RUNTIME")));
+    }
+
+    @Test
+    void testAssumptionTrueIsTrue() {
+        assumeTrue("GURU".equalsIgnoreCase("GURU"));
+    }
+
+    @Test
+    @EnabledOnOs(OS.MAC)
+    void testMeOnOS() {
+
+    }
+
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    void testMeOnWindows() {
+
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    void testMeOnJava8() {
+
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_11)
+    void testMeOnJava11() {
+
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "env:USERNAME", matches = "Seren")
+    void testMeIfUserSeren() {
+
+    }
+
+    @Test
+    @EnabledOnJre(JRE.JAVA_8)
+    @EnabledIfEnvironmentVariable(named = "env:USERNAME", matches = "notExisting")
+    void testMeIfUserFreja() {
+
     }
 }
